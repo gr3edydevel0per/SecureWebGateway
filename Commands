@@ -1,0 +1,18 @@
+
+
+sudo apt install mariadb-server
+
+sudo service mariadb start
+
+
+
+sudo mariadb
+
+// Mariadb Console
+
+first run the user creation queries then exit the mariadb
+
+
+sudo mariadb -u networkx -p
+
+// it will ask for password user networkx
