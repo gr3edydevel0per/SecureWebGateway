@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetworkX - Logs</title>
+    <%- include('favicon') %>
+    <%- include('cdns') %>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 16px;
+            text-align: left;
+          
+        }
+
+        table th, table td {
+            padding: 12px;
+            border: 1px solid #e2e2e2;
+        }
+
+        table th {
+            background-color: #003049; /* Dark Blue */
+            color: #ffffff;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        table td {
+            background-color: #f9f9f9;
+            text-wrap: nowrap;
+        }
+
+        table tr:hover {
+            background-color: #e0f7fa; /* Light blue on hover */
+            cursor: pointer;
+        }
+
+        .url-column {
+            max-width: 250px;
+            word-wrap: break-word;
+            word-break: break-word;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .table-container {
+            max-height:550px;
+            overflow-y: scroll;
+            margin-top: 20px;
+            overflow-x: scroll;
+        }
+
+        .filter-container {
+    display: flex;
+    flex-wrap: wrap;  /* Ensures that the filters wrap to the next line when space is limited */
+    gap: 15px;  /* Adds space between the filters */
+    margin: 20px 0;
+}
+
+.filter-container select,
+.filter-container input {
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 220px;  /* Make the input fields consistent in width */
+    margin-bottom: 10px;  /* Adds space between the filters */
+}
+
+.filter-container .filter-input {
+    width: calc(33.33% - 15px);  /* Ensures inputs are responsive */
+    box-sizing: border-box;  /* Prevents overflow by including padding and border in width */
+}
+
+@media (max-width: 768px) {
+    .filter-container .filter-input {
+        width: calc(50% - 15px);  /* Adjusts width for smaller screens */
+    }
+}
+
+@media (max-width: 480px) {
+    .filter-container .filter-input {
+        width: 100%;  /* Makes each input take up full width on mobile screens */
+    }
+}
+
+.blocked-row {
+    background-color: red !important;
+    color: white;  /* Optional: To make the text more readable on red background */
+}
+
+    </style>
+</head>
+<body style="overflow-y: hidden;">
+    <div class="container">
+        <div class="Sidebar side-bar" style="display: flex; flex-direction: column;">
+            <div class="sidebar-Logo">
+                <img src="/images/newLogo.png" alt="" width="100px" height="100px">
+                <span><h1 class="sidebar-brand protest-revolution-regular">NetworkX</h1></span>
+            </div>
+            <div class="sidebar-navigation">
+                <ul style="padding-left: 0px;">
+                    <li class="navigate"><a href="/" style="font-size: 24px;"><i class='bx bxs-home sb-nicon'></i> <span class="pageName">Insights</span></a></li>
+                    <li class="navigate"><a href="/logs" style="font-size: 24px;"><i class='bx bx-analyse'></i><span class="pageName">Log Table</span></a></li>
+                    <li class="navigate"><a href="/server-stats" style="font-size: 24px;"><i class='bx bxs-server sb-nicon'></i> <span class="pageName">Server Status</span></a></li>
+                    <li class="navigate"><a href="/rules" style="font-size: 24px;"><i class='bx bxs-cog'></i><span class="pageName">Define Rules</span></a></li>
+
+                </ul>
+            </div>
+        </div>
+        <div class="Main">
+            <header class="header">
+                <h1 class="doto-brand-bold" style="margin-left: 30px;">LOG TABLE</h1>
+                <h1 class="doto-brand-bold nav-msg">Welcome Admin!</h1>
+            </header>
+
+            <div class="filter-container" style="margin: 30px;">
+                <input class="filter-input" name="timestamp" type="text" placeholder="Filter by Timestamp" />
+                <input class="filter-input" name="ip_address" type="text" placeholder="Filter by IP Address" />
+                <input class="filter-input" name="user_id" type="text" placeholder="Filter by User ID" />
+                <input class="filter-input" name="url" type="text" placeholder="Filter by URL" />
+                <select class="filter-input" name="action_taken">
+                    <option value="">Select Action</option>
+                    <option value="allowed">Allowed</option>
+                    <option value="blocked">Blocked</option>
+                </select>
+                <input class="filter-input" name="device_id" type="text" placeholder="Filter by Device ID" />
+                <input class="filter-input" name="request_type" type="text" placeholder="Filter by Request Type" />
+                <input class="filter-input" name="protocol" type="text" placeholder="Filter by Protocol" />
+                <input class="filter-input" name="severity" type="text" placeholder="Filter by Severity" />
+                <input class="filter-input" name="reason" type="text" placeholder="Filter by Reason" />
+                <input class="filter-input" name="location" type="text" placeholder="Filter by Location" />
+                <input class="filter-input" name="user_agent" type="text" placeholder="Filter by User Agent" />
+                <input class="filter-input" name="content_type" type="text" placeholder="Filter by Content Type" />
+            </div>
+
+            <hr style="margin:30px">
+            
+            
+            
+            <div class="table-container" style="margin: 30px;">
+                <table>
+                    <thead style="font-size: 20px;">
+                        <tr>
+                            <th>Timestamp</th>
+                            <th>IP Address</th>
+                            <th>User ID</th>
+                            <th>Device ID</th>
+                            <th class="url-column">URL</th>
+                            <th>Request Type</th>
+                            <th>Protocol</th>
+                            <th>Severity</th>
+                            <th>Action Taken</th>
+                            <th>Reason</th>
+                            <th>Response Time</th>
+                            <th>Location</th>
+                            <th>User Agent</th>
+                            <th>Content Type</th>
+                        </tr>
+                    </thead>
+                    <tbody id="log-table-body">
+                        <!-- Rows will be dynamically inserted here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const filterFields = document.querySelectorAll('.filter-input');
+        const logTableBody = document.getElementById('log-table-body');
+    
+        // Function to fetch and display logs
+        async function fetchLogs(filters = {}) {
+            try {
+                const response = await fetch('/logs', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(filters),
+                });
+    
+                if (!response.ok) {
+                    throw new Error('Failed to fetch logs');
+                }
+    
+                const logs = await response.json();
+    
+                // Clear existing table rows
+                logTableBody.innerHTML = '';
+    
+                // Populate table with logs
+                logs.slice(0, 50).forEach((log) => {
+    const row = `
+        <tr>
+            <td>${log.timestamp}</td>
+            <td>${log.ip_address}</td>
+            <td>${log.user_id}</td>
+            <td>${log.device_id}</td>
+            <td><a style="text-decoration: none; color: black;" href="${log.url}">View URL <i class='bx bx-link-external'></i></a></td>
+            <td>${log.request_type}</td>
+            <td>${log.protocol}</td>
+            <td>${log.severity}</td>
+            <td>${log.action_taken}</td>
+            <td>${log.reason}</td>
+            <td>${log.response_time}</td>
+            <td>${log.location}</td>
+            <td>${log.user_agent}</td>
+            <td>${log.content_type}</td>
+        </tr>
+    `;
+    logTableBody.insertAdjacentHTML('beforeend', row);
+});
+
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to fetch logs. Please try again.');
+            }
+        }
+    
+        // Event listener for real-time filtering
+        filterFields.forEach((field) => {
+            field.addEventListener('input', () => {
+                const filters = {};
+                filterFields.forEach((input) => {
+                    if (input.value) {
+                        filters[input.name] = input.value;
+                    }
+                });
+                fetchLogs(filters);
+            });
+        });
+    
+        // Fetch all logs on page load
+        window.onload = () => {
+            fetchLogs();
+        };
+    </script>
+    
+    
+</body>
+</html>

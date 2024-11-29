@@ -1,0 +1,58 @@
+<div class="log-window">
+    <div class="flex-container">
+        <div class="flex-items" style="display: flex;
+justify-content: flex-start;"> <i class='bx bxs-user avatar' style="color: white;"></i>
+
+            <div style="display: flex;display: flex;
+flex-direction: column;">
+                <span class="insights-Headings">Users</span> <span class="result" id="userCount" style="font-size: 30px;color: white;"></span>
+            </div>
+
+        </div>
+        <div class="flex-items" style="display: flex;
+justify-content: flex-start;color: black;"><i class='bx bx-bar-chart-square avatar '></i>
+
+            <div style="display: flex;display: flex;
+flex-direction: column;">
+                <span class="insights-Headings" style="color: black;">Request's Today</span> <span class="result" id="requestCount" style="font-size: 30px;"></span>
+            </div>
+
+        </div>
+        <div class="flex-items" style="display: flex;
+        justify-content: flex-start;color: black;">    <i class='bx bx-trending-up avatar' style="color: white;" ></i>
+        
+                    <div style="display: flex;display: flex;
+        flex-direction: column;">
+                        <span class="insights-Headings" style="color:white;">Max Request's from</span> <span class="result" id="maxRequest" style="font-size: 30px;color: white;">127.0.0.1</span>
+                    </div>
+        
+                </div>
+                <div class="flex-items" style="display: flex;
+                justify-content: flex-start;color: black;">   <i class='bx bxs-time-five avatar' ></i>
+                
+                            <div style="display: flex;display: flex;
+                flex-direction: column;">
+                                <span class="insights-Headings" style="color: black;font-size: 1.3rem;" >Comming Soon </span> 
+                            </div>
+                
+                        </div>
+    </div>
+
+    <div class="analytics">
+        <div class="requests-graph ">
+            <canvas id="requestsByHourChart"></canvas>
+        </div>
+
+
+        <div class="graph2">
+            <svg id="pieChart"></svg>
+        </div>
+    </div>
+
+    <div class="analytics">
+        <div id="pieChartContainer"></div>
+
+
+        <div id="chart"></div>
+    </div>
+</div>

@@ -1,0 +1,382 @@
+@import url('https://fonts.googleapis.com/css2?family=Doto:wght@500&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Oswald:wght@200..700&display=swap');
+
+
+body{
+    background-color: #f7f7f8;
+    overflow-x: hidden;
+    margin: 0px;
+}
+
+
+
+.doto-brand {
+  font-family: "Doto", serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+  font-variation-settings:
+    "ROND" 0;
+}
+
+.doto-brand-bold {
+  font-family: "Doto", serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+  font-variation-settings:
+    "ROND" 0;
+}
+
+/*
+.header{
+    margin: 3px;
+    position:sticky;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    width: 100%;
+ 
+
+}
+
+
+.side-bar{
+    top: 0%;
+    float: left;
+    width: 20%;
+    margin: 30px;
+    border-radius: 20px;
+background-color: #ffffff;
+    height: 85vh;
+    position: absolute;
+    display: flex;
+    width: 218px;
+    overflow: hidden;
+}
+
+
+.nav-logo{
+    left: 20%;
+    position: absolute;
+}
+.nav-msg{
+    right: 2%;
+    position: absolute;
+}
+
+
+
+
+
+
+  .layout {
+    width: 100%;
+  
+    display: flex;
+    gap: 16px;
+  }
+  
+  .grow2 { flex-grow: 2; } */
+
+
+  .container {  display: grid;
+    grid-template-columns: 0.459fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 3fr;
+    gap: 0px 0px;
+    grid-auto-flow: row;
+    grid-template-areas:
+      "Sidebar Main Main"
+      "Sidebar Main Main"
+      ". . .";
+  }
+  
+  .Sidebar { grid-area: Sidebar; }
+  
+  .Main{ grid-area: Main; }
+  
+
+  .header{
+    background-color: #ffffff;
+    position:sticky;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    width: 100%;
+ 
+
+}
+
+
+.side-bar{
+    top: 0%;
+    float: left;
+   
+background-color: #780000;
+    height: 100%;
+    position: absolute;
+    display: flex;
+    width: 356px;
+    overflow: hidden;
+}
+
+
+.nav-logo{
+    left: 3%;
+    position: absolute;
+}
+.nav-msg{
+    right: 4%;
+    position: absolute;
+}
+
+
+
+
+.flex-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: normal;
+  align-content: center;
+  margin: 30px;
+    margin-bottom: 30px;
+  margin-bottom: 0px;
+  }
+
+  .flex-items{
+    background-color: #ffffff;
+    width: 280px;
+    height: 100px;
+    border-radius: 20px;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .flex-items:nth-child(1) {
+    background-color: #C1121F;
+    display: block;
+    flex-grow: 0;
+    flex-shrink: 1;
+    flex-basis: auto;
+    align-self: auto;
+    order: 0;
+  }
+  
+  .flex-items:nth-child(2) {
+    background-color: #FDF0D5;
+    display: block;
+    flex-grow: 0;
+    flex-shrink: 1;
+    flex-basis: auto;
+    align-self: auto;
+    order: 0;
+  }
+  
+  .flex-items:nth-child(3) {
+    background-color: #003049;
+    display: block;
+    flex-grow: 0;
+    flex-shrink: 1;
+    flex-basis: auto;
+    align-self: auto;
+    order: 0;
+  }
+  
+  .flex-items:nth-child(4) {
+    background-color: #669BBC;
+    display: block;
+    flex-grow: 0;
+    flex-shrink: 1;
+    flex-basis: auto;
+    align-self: auto;
+    order: 0;
+  }
+  
+  .flex-items:nth-child(5) {
+    display: block;
+    flex-grow: 0;
+    flex-shrink: 1;
+    flex-basis: auto;
+    align-self: auto;
+    order: 0;
+  }
+
+
+.oswald-200 {
+  font-family: "Oswald", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 200px;
+  font-style: normal;
+}
+
+
+
+.requests-graph{
+  margin: 30px;
+  background-color: #ffffff;
+  width: 700px;
+  height: 310px;
+  border-radius: 20px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+  
+
+
+ .avatar{
+  margin: 15px;
+  height: 70px;
+  font-size: 70px;
+ }
+
+.insights-Headings{
+  margin: 0px;
+  font-size: 0.875rem;
+  font-weight: 1000;
+  font-family: DM Sans, sans-serif;
+  line-height: 1.43;
+  color: rgb(255, 255, 255);
+  
+ }
+
+ .sidebar-Logo{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 264px;
+  margin-top: 0px;
+  top: 0;
+  color: white;
+  border-bottom: 1px solid rgb(244, 247, 254);
+  border-bottom-color: rgb(244, 247, 254);
+border-color: rgb(244, 247, 254);
+}
+ 
+
+.sidebar-brand{
+  margin: 0px;
+  font-size: 2.7rem;
+  font-weight: 700;
+  line-height: 1.167;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+
+  margin-top: 20px;
+}
+
+
+.sidebar-navigation{
+  margin: 20px 0px 80px;
+  position: relative;
+  padding: 0px 0px 0px 24px;
+}
+
+.side-bar ul{
+  list-style: none;
+  margin: 20px 0px 80px;
+  position: relative;
+  padding: 0px 0px 0px 24px;
+}
+.sb-nicon{
+  color:white
+}
+
+.navigate{
+ 
+  display: flex;
+  outline: 0px;
+  border: 0px;
+  margin: 0px;
+  cursor: pointer;
+  text-decoration: none;
+  min-width: 0px;
+  padding: 7px 50px;
+  align-items: center;
+  justify-content: flex-start;
+}
+.navigate a{
+  text-decoration: none;
+  color: white;
+}
+
+.navigate .pageName{
+  font-size: 24px;
+  font-weight: 400;
+  font-family: DM Sans, sans-serif;
+  margin-left: 25px;
+}
+
+
+.analytics{
+  display: flex;
+  flex-direction: row;
+}
+
+.graph2{
+  margin: 30px;
+  background-color: #ffffff;
+  width: 40%;
+  height: 310px;
+  border-radius: 20px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-left: 40px;
+}
+
+
+svg {
+  width: 100%;
+  height: 100%;
+
+}
+
+path.slice {
+  stroke: #fff;
+  stroke-width: 2px;
+}
+
+polyline {
+  opacity: 0.3;
+  stroke: black;
+  stroke-width: 2px;
+  fill: none;
+}
+
+text {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+
+.arvo-regular {
+  font-family: "Arvo", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.arvo-bold {
+  font-family: "Arvo", serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.arvo-regular-italic {
+  font-family: "Arvo", serif;
+  font-weight: 400;
+  font-style: italic;
+}
+
+.arvo-bold-italic {
+  font-family: "Arvo", serif;
+  font-weight: 700;
+  font-style: italic;
+}
+
+.protest-revolution-regular {
+  font-family: "Protest Revolution", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}

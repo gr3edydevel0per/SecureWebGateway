@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetworkX - Logs</title>
+    <%- include('favicon') %>
+    <%- include('cdns') %>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .hidden {
+            display: none;
+        }
+
+        button {
+            margin: 10px;
+  padding: 10px 20px;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  background: #003049;
+  border-radius: 30px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 16px;
+            text-align: left;
+        }
+
+        table th, table td {
+            padding: 12px;
+            border: 1px solid #e2e2e2;
+        }
+
+        table th {
+            background-color: #FDF0D5; /* Dark Blue */
+            color: black;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        table td {
+            background-color: #f9f9f9;
+            text-wrap: nowrap;
+            word-break: break-word;
+            align-items: center;
+            justify-content: center;
+        }
+
+        table tr:hover {
+            background-color: #e0f7fa; /* Light blue on hover */
+            cursor: pointer;
+        }
+
+        .url-column {
+            max-width: 250px;
+            word-wrap: break-word;
+            word-break: break-word;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .table-container {
+            max-height:700px;
+            overflow-y: scroll;
+            margin-top: 20px;
+            overflow-x: scroll;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding-top: 100px;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 400px;
+            border-radius: 8px;
+        }
+
+        .modal-header {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Toggle switch styles */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        /* Hide the default checkbox */
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        /* Slider style */
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: 0.4s;
+            border-radius: 34px;
+        }
+
+        /* Circle inside the slider */
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            border-radius: 50%;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: 0.4s;
+        }
+
+        /* When the checkbox is checked, change the background to green */
+        input:checked + .slider {
+            background-color: #4CAF50;
+        }
+
+        /* Move the circle to the right when checked */
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        /* When the checkbox is not checked, change the background to red */
+        input:not(:checked) + .slider {
+            background-color: #f44336;
+        }
+
+        /* When the checkbox is unchecked, move the circle to the left */
+        input:not(:checked) + .slider:before {
+            transform: translateX(0);
+        }
+        .toggleSwitch{
+            margin: 30px;
+            margin-bottom: 0px;
+        }
+        .rule-deleteBtn{
+            background-color: #C1121F;
+            color: white;
+        }
+
+        #insertRule {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+            padding: 20px;
+        }
+        .regexMain{
+            font-family: Arial, sans-serif;
+            background-color: #f4f7fa;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 30px;
+            height: 60vh;
+        }
+        #result {
+            margin-top: 30px;
+            text-align: center;
+            background-color: #f9f9f9;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        #regexOutput {
+            background-color: #333;
+            color: #fff;
+            padding: 15px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+
+
+        .regexMain label {
+            font-size: 16px;
+            margin-bottom: 8px;
+            display: block;
+            color: #555;
+        }
+
+        .regexMain input[type="text"],
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            background-color: #f9f9f9;
+        }
+
+        .regexMain input[type="text"]:focus,
+        select:focus {
+            border-color: #007bff;
+            background-color: #fff;
+        }
+
+        .regexMain button {
+            width: 100%;
+            padding: 12px;
+       
+            color: #fff;
+            font-size: 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+    
+        .regexMain #keywordSection {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body style="overflow-y: hidden;">
+    <div class="container">
+        <div class="Sidebar side-bar" style="display: flex; flex-direction: column;">
+            <div class="sidebar-Logo">
+                <img src="/images/newLogo.png" alt="" width="100px" height="100px">
+                <span><h1 class="sidebar-brand protest-revolution-regular">NetworkX</h1></span>
+            </div>
+            <div class="sidebar-navigation">
+                <ul style="padding-left: 0px;">
+                    <li class="navigate"><a href="/" style="font-size: 24px;"><i class='bx bxs-home sb-nicon'></i> <span class="pageName">Insights</span></a></li>
+                    <li class="navigate"><a href="/logs" style="font-size: 24px;"><i class='bx bx-analyse'></i><span class="pageName">Log Table</span></a></li>
+                    <li class="navigate"><a href="/server-stats" style="font-size: 24px;"><i class='bx bxs-server sb-nicon'></i> <span class="pageName">Server Status</span></a></li>
+                    <li class="navigate"><a href="/rules" style="font-size: 24px;"><i class='bx bxs-cog'></i><span class="pageName">Define Rules</span></a></li>
+
+                </ul>
+            </div>
+        </div>
+        <div class="Main">
+            <header class="header">
+                <h1 class="doto-brand-bold" style="margin-left: 30px;">Rules</h1>
+                <h1 class="doto-brand-bold nav-msg">Welcome Admin!</h1>
+            </header>
+
+            <div class="toggleSwitch">
+                <button id="showRulesButton">Show All Rules</button>
+                <button id="insertRuleButton">Insert a New Rule</button>
+            </div>
+
+            <!-- Show All Rules Section -->
+            <div id="showRules" class="rules">
+                <div id="rulesList">
+                    <div class="table-container" style="margin: 30px;margin-top: 0px;">
+                        <table>
+                            <thead style="font-size: 20px;">
+                                <tr>
+                                    <th>Rule ID</th>
+                                    <th>Domain</th>
+                                    <th>Rule Type</th>
+                                    <th>Keywords</th>
+                                    <th>Created By</th>
+                                    <th>Created At</th>
+                                    <th>Updated At</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="rule-table-body">
+                                <!-- Rows will be dynamically inserted here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Insert Rule Section -->
+     
+            
+    <div class="regexMain"><div id="insertRule" class="rules hidden">
+        <form id="regexForm">
+            <label for="domain">Enter Domain Name:</label>
+            <input type="text" id="domain" name="domain" placeholder="e.g., example.com " required>
+    
+            <label for="blockType">Select Block Type:</label>
+            <select id="blockType" name="blockType" required>
+                <option value="fqdn">Block Entire FQDN (with Subdomains)</option>
+                <option value="keyword">Block Subdomains by Keyword</option>
+            </select>
+    
+            <div id="keywordSection" style="display: none;">
+                <label for="keywords">Enter Keywords (comma-separated):</label>
+                <input type="text" id="keywords" name="keywords" placeholder="e.g., blog, shop">
+            </div>
+    
+            <button type="submit">Add rule</button>
+        </form>
+    
+        <div id="result" class="result hidden">
+            <h3>Generated Regex:</h3>
+            <pre id="regexOutput"></pre>
+        </div>
+    </div></div>
+
+
+        </div>
+    </div>
+
+    <!-- Modal for Delete Confirmation -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close">&times;</span>
+                <h2>Confirm Deletion</h2>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this rule?</p>
+            </div>
+            <div class="modal-footer">
+                <button id="confirmDeleteButton">Yes</button>
+                <button id="cancelDeleteButton">No</button>
+            </div>
+        </div>
+    </div>
+
+ 
+    <script>
+        const showRulesButton = document.getElementById("showRulesButton");
+        const insertRuleButton = document.getElementById("insertRuleButton");
+        const showRules = document.getElementById("showRules");
+        const insertRule = document.getElementById("insertRule");
+    
+        const ruleTableBody = document.getElementById('rule-table-body');
+        const deleteModal = document.getElementById('deleteModal');
+        const confirmDeleteButton = document.getElementById('confirmDeleteButton');
+        const cancelDeleteButton = document.getElementById('cancelDeleteButton');
+        let ruleIdToDelete = null;
+    
+        // Toggle between Show Rules and Insert Rule sections
+        showRulesButton.addEventListener("click", () => {
+            showRules.classList.remove("hidden");
+            insertRule.classList.add("hidden");
+        });
+        insertRuleButton.addEventListener("click", () => {
+            showRules.classList.add("hidden");
+            insertRule.classList.remove("hidden");
+        });
+    
+    
+    
+        // Display all rules (simulate fetching from backend)
+        async function fetchRules() {
+            const rules = await fetch('/get-rules') // Adjust to your server route
+                .then(response => response.json())
+                .catch(error => console.error('Error fetching rules:', error));
+            console.log(rules);
+            ruleTableBody.innerHTML = '';
+            rules.forEach(rule => {
+                const tr = document.createElement('tr');
+                const isActiveChecked = rule.is_active === 1 ? 'green' : 'red';
+    
+                tr.innerHTML = `
+                    <td>${rule.id}</td>
+                    <td class="url-column">${rule.domain}</td>
+                    <td> ${rule.block_type === 'fqdn' ? "FQDN" : "Keyword"}</td>
+                    <td>${rule.keywords}</td>
+                    <td>${rule.created_by}</td>
+                    <td>${rule.created_at}</td>
+                    <td>${rule.updated_at}</td>
+                     <td>
+                        <label class="switch">
+                            <input type="checkbox" ${rule.is_active ? "checked" : ""} data-rule-id="${rule.id}" onchange="toggleActiveStatus(event)">
+                            <span class="slider"></span>
+                        </label>
+                    </td>
+                    <td><button class="rule-deleteBtn" onclick="showDeleteModal(${rule.id})">Delete</button></td>
+                `;
+                ruleTableBody.appendChild(tr);
+            });
+        }
+    
+
+        async function toggleActiveStatus(event) {
+    const ruleId = event.target.dataset.ruleId;
+    const isActive = event.target.checked ? 1 : 0;
+
+    try {
+        const response = await fetch(`/update-status/${ruleId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ is_active: isActive }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to update rule status');
+        }
+
+        const data = await response.json();
+        console.log(data.message);
+
+    } catch (error) {
+        console.error('Error updating rule status:', error);
+        alert('An error occurred while updating the rule status. Please try again.');
+    }
+}
+
+
+
+        // Show delete confirmation modal
+        function showDeleteModal(ruleId) {
+            ruleIdToDelete = ruleId;
+            deleteModal.style.display = "block";
+        }
+    
+        // Confirm deletion
+        confirmDeleteButton.addEventListener("click", async () => {
+            if (ruleIdToDelete !== null) {
+                await fetch(`/deleterule/${ruleIdToDelete}`, {
+                    method: 'DELETE'
+                });
+                fetchRules();
+            }
+            deleteModal.style.display = "none";
+        });
+    
+        // Cancel deletion
+        cancelDeleteButton.addEventListener("click", () => {
+            deleteModal.style.display = "none";
+        });
+    
+        // Close modal when clicking on the close button
+        document.querySelector('.close').addEventListener('click', () => {
+            deleteModal.style.display = "none";
+        });
+    
+        // Fetch rules when the page loads
+        fetchRules();
+
+        const form = document.getElementById("regexForm");
+        const blockType = document.getElementById("blockType");
+        const keywordSection = document.getElementById("keywordSection");
+        const resultDiv = document.getElementById("result");
+        const regexOutput = document.getElementById("regexOutput");
+        
+
+        // Toggle keyword input visibility based on block type
+        blockType.addEventListener("change", () => {
+            if (blockType.value === "keyword") {
+                keywordSection.style.display = "block";
+            } else {
+                keywordSection.style.display = "none";
+            }
+        });
+
+
+
+        form.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const domain = document.getElementById("domain").value.trim();
+    const blockTypeValue = blockType.value;
+    const keywords = document.getElementById("keywords").value.trim();
+
+    if (!domain) {
+        alert("Please enter a valid domain name.");
+        return;
+    }
+
+    // Clean the domain name (remove protocols, trailing slashes)
+    const cleanDomain = domain
+        .replace(/^https?:\/\//, '')  // Remove http:// or https://
+        .replace(/\/$/, '');          // Remove trailing slash
+
+    let Genregex = "";
+
+    switch (blockTypeValue) {
+    case "fqdn":
+        // Block entire FQDN including subdomains and optional ports (no protocol requirement)
+        Genregex = `^(?:[a-zA-Z0-9_-]+\\.)*${cleanDomain.replace(/\./g, '\\.')}(?::\\d+)?(/.*)?$`;
+        break;
+
+    case "keyword":
+        // Block subdomains containing specific keywords
+        if (!keywords) {
+            alert("Please enter at least one keyword.");
+            return;
+        }
+
+        const keywordArray = keywords.split(",").map(k => k.trim()).join("|");
+        Genregex = `^(?:${keywordArray})\\.${cleanDomain.replace(/\./g, '\\.')}(?::\\d+)?(/.*)?$`;
+        break;
+
+    default:
+        alert("Invalid block type selected.");
+        return;
+}
+
+    console.log(domain,blockTypeValue,keywords,Genregex)
+    // Show the generated regex
+    fetch('/add-rule', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            domain: domain,
+            block_type: blockTypeValue,
+            keywords: keywords,
+            regex: Genregex,
+        }),
+    }).then(response => {
+        if (!response.ok) {
+            alert('Error adding rule');
+            return;
+        }
+        fetchRules();  // Refresh the rules table
+        form.reset();
+    }).catch(err => console.error('Error submitting rule:', err));
+});
+
+     
+    </script>
+    
+
+</body>
+</html>
+
+

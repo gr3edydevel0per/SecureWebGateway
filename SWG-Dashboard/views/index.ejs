@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetworkX - Dashboard</title>
+    <%- include('favicon')%>
+    
+    <%- include('cdns')%>
+    <link rel="stylesheet" href="/css/style.css">
+
+
+<style>
+    #chart{
+        margin-top: 0px !important;
+        margin: 30px;
+  background-color: #ffffff;
+  width: 40%;
+
+  height: 310px;
+  border-radius: 20px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-left: 40px;
+    }
+
+    .bar:nth-child(1){
+        fill: #003049;
+    }
+    .bar:nth-child(2){
+        fill: #669BBC;
+    }
+    .bar:nth-child(3){
+        fill: #780000;
+    }
+    .bar:nth-child(4){
+        fill: #003049;
+    }
+
+    .bar:nth-child(5){
+        fill: #17bebb;
+    }
+
+#pieChartContainer{
+    margin-top: 0px !important;
+    margin: 30px;
+  background-color: #ffffff;
+  width: 700px;
+  height: 310px;
+  border-radius: 20px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+
+
+</style>
+
+</head>
+
+<body style="overflow: hidden;" >
+
+
+
+
+
+    <div class="container">
+        <div class="Sidebar side-bar" style="display: flex;flex-direction: column;">
+            <div class="sidebar-Logo">
+                <img src="/images/newLogo.png" alt="" width="100px" height="100px">
+                <span><h1 class="sidebar-brand protest-revolution-regular ">NetworkX</h1></span>
+            </div>
+            <div class="sidebar-navigation">
+                <ul style="padding-left: 0px;">
+                    <li class="navigate"><a href="/" style="font-size: 24px;"><i class='bx bxs-home sb-nicon'></i> <span class="pageName">Insights</span></a></li>
+                    <li class="navigate"><a href="/logs" style="font-size: 24px;"><i class='bx bx-analyse'></i><span class="pageName">Log Table</span></a></li>
+                    <li class="navigate"><a href="/server-stats" style="font-size: 24px;"><i class='bx bxs-server sb-nicon'></i> <span class="pageName">Server Status</span></a></li>
+                    <li class="navigate"><a href="/rules" style="font-size: 24px;"><i class='bx bxs-cog'></i><span class="pageName">Define Rules</span></a></li>
+
+                </ul>
+            </div>
+
+        </div>
+        <div class="Main">
+            <header class="header">
+                <h1 class="doto-brand-bold " style="margin-left: 30px;"> DASHBOARD</h1>
+                <h1 class="doto-brand-bold nav-msg"> Welcome Admin!</h1>
+            </header>
+
+            <%- include('logs')%>
+        </div>
+    </div>
+
+
+    <script src="/js/pieChart.js"></script>
+
+    <script>
+        // Data for top 5 visited sites
+        const data = [
+            { site: "google.com", visits: 120 },
+            { site: "facebook.com", visits: 98 },
+            { site: "youtube.com", visits: 85 },
+            { site: "twitter.com", visits: 72 },
+            { site: "linkedin.com", visits: 58 }
+        ];
+
+        // Set chart dimensions
+        const widthChart = 600, heightChart = 290;
+        const margin = { top: 20, right: 30, bottom: 40, left: 40 };
+
+        // Append an SVG element inside the #chart container
+        const svg = d3.select("#chart")
+            .append("svg")
+            .attr("width", widthChart)
+            .attr("height", heightChart)
+            .append("g")
+            .attr("transform", `translate(${margin.left},${margin.top})`);
+
+        // X and Y scales
+        const x = d3.scaleBand()
+            .domain(data.map(d => d.site))
+            .range([0, widthChart - margin.left - margin.right])
+            .padding(0.1);
+
+        const y = d3.scaleLinear()
+            .domain([0, d3.max(data, d => d.visits)])
+            .nice()
+            .range([heightChart - margin.top - margin.bottom, 0]);
+
+        // Create bars
+        svg.selectAll(".bar")
+            .data(data)
+            .enter().append("rect")
+            .attr("class", "bar")
+            .attr("x", d => x(d.site))
+            .attr("y", d => y(d.visits))
+            .attr("width", x.bandwidth())
+            .attr("height", d => heightChart - margin.top - margin.bottom - y(d.visits));
+
+        // Add X axis
+        svg.append("g")
+            .attr("class", "x-axis")
+            .attr("transform", `translate(0,${heightChart - margin.top - margin.bottom})`)
+            .call(d3.axisBottom(x));
+
+        // Add Y axis
+        svg.append("g")
+            .attr("class", "y-axis")
+            .call(d3.axisLeft(y));
+
+        // Add text labels on bars
+        svg.selectAll(".text")
+            .data(data)
+            .enter().append("text")
+            .attr("x", d => x(d.site) + x.bandwidth() / 2)
+            .attr("y", d => y(d.visits) - 5)
+            .attr("text-anchor", "middle")
+            .text(d => d.visits);
+
+    </script>
+
+    <script src="/js/insights.js"></script>
+    <script>
+        // Chart dimensions
+        const chartWidth = 650, chartHeight = 290, chartRadius = Math.min(chartWidth, chartHeight) / 2 - 20;
+    
+        // Create the main SVG container
+        const svgChart = d3.select("#pieChartContainer")
+            .append("svg")
+            .attr("id", "pie-chart-svg")
+            .attr("width", chartWidth)
+            .attr("height", chartHeight)
+            .append("g")
+            .attr("transform", `translate(${chartWidth / 2}, ${chartHeight / 2})`);
+    
+        // Groups for slices
+        svgChart.append("g").attr("class", "pieSlices");
+    
+        // Pie and arc generators
+        const pieChart = d3.pie()
+            .sort(null)
+            .value(d => d.value);
+    
+        const arcGenerator = d3.arc()
+            .outerRadius(chartRadius * 0.8)
+            .innerRadius(chartRadius * 0.5);
+    
+        // Color scale
+        const colorScale = d3.scaleOrdinal(d3.schemeCategory10);
+    
+        // Dummy data generator
+        function generateData() {
+    // Make an HTTP GET request to fetch method composition data from the server
+    fetch('http://localhost:3000/methods-composition')
+        .then(response => response.json())  // Parse the JSON response
+        .then(data => {
+            // Assuming the response has a `method_composition` array
+            const sampleData = data.method_composition.map(item => ({
+                label: item.request_type,
+                value: item.method_count
+            }));
+            
+            // Call refreshChart with the fetched data
+            refreshChart(sampleData);
+        })
+        .catch(error => {
+            console.error('Error fetching data:', error);
+        });
+}
+
+    
+        // Update chart
+        function refreshChart(data) {
+            // Pie slices
+            const slices = svgChart.select(".pieSlices").selectAll("path.pieSlice")
+                .data(pieChart(data));
+    
+            slices.enter()
+                .append("path")
+                .attr("class", "pieSlice")
+                .style("fill", d => colorScale(d.data.label))
+                .merge(slices)
+                .transition().duration(1000)
+                .attrTween("d", function (d) {
+                    const interpolate = d3.interpolate(this._current || d, d);
+                    this._current = interpolate(1);
+                    return t => arcGenerator(interpolate(t));
+                });
+    
+            slices.exit().remove();
+
+    
+            // Add legend
+            const legendItems = d3.select("#pie-chart-svg")
+                .selectAll(".legendItem")
+                .data(data);
+    
+            const legendEnter = legendItems.enter()
+                .append("g")
+                .attr("class", "legendItem")
+                .attr("transform", (d, i) => `translate(${chartWidth - 150}, ${20 + i * 25})`); // Adjusted for better spacing
+    
+            legendEnter.append("rect")
+                .attr("width", 20)  // Increased size for better visibility
+                .attr("height", 20)
+                .attr("fill", d => colorScale(d.label));
+    
+            legendEnter.append("text")
+                .attr("x", 30)  // Adjusted to align better with the color box
+                .attr("y", 15)  // Adjusted for proper vertical alignment
+                .style("font-size", "14px")  // Increased font size for clarity
+                .style("font-weight", "bold")  // Made text bold for emphasis
+                .text(d => `${d.label}: ${d.value}`);
+    
+            legendEnter.merge(legendItems);
+    
+            legendItems.exit().remove();
+        }
+    
+        generateData();
+    </script>
+    
+
+</body>
+
+</html> 
