@@ -18,11 +18,13 @@ to see whether the domain is blocked. If it is blocked, it retrieves the corresp
 */
 func CheckBlockedDomain(db *sql.DB, domain string) string {
 	var regex string
-	err := db.QueryRow("SELECT blocking_pattern FROM blocked_domain WHERE domain = ?", domain).Scan(&regex)
+	err := db.QueryRow("SELECT regex FROM domain_block WHERE domain = ? AND is_active=1;", domain).Scan(&regex)
 	if err != nil {
 		if err == sql.ErrNoRows {
+			// No matching domain found
 			return ""
 		}
+		// Log unexpected database error
 		log.Printf("Error querying blocked_domain table: %v", err)
 		return ""
 	}
@@ -49,13 +51,19 @@ HandleDomainBlocking checks if a domain is blocked. If blocked, it returns a red
 func HandleDomainBlocking(db *sql.DB, req *http.Request, responseChan chan<- *http.Response, wg *sync.WaitGroup) {
 	defer wg.Done()
 	cleanedDomain := utility.CleanDomain(req.URL.Host)
+	if isLocalhost(cleanedDomain) {
+		responseChan <- nil
+		return
+	}
+
 	blockPattern := CheckBlockedDomain(db, cleanedDomain)
 
 	if blockPattern != "" {
 		re := regexp.MustCompile(blockPattern)
+		fmt.Printf("debug >>>>>>>>> %s\n\n %s\n", re.MatchString(req.URL.Host), req.URL.Host)
 		if re.MatchString(req.URL.Host) {
 			log.Printf("Redirecting URL by domain: %s to block page", req.URL.Host)
-			redirectURL := fmt.Sprintf("http://localhost:4000/blocked?url=%s", req.URL.String())
+			redirectURL := fmt.Sprintf("http://127.0.0.1:4000/blocked?url=%s", req.URL.String())
 			redirectResponse := goproxy.NewResponse(req, "", http.StatusTemporaryRedirect, "")
 			redirectResponse.Header.Set("Location", redirectURL)
 			responseChan <- redirectResponse
@@ -65,18 +73,40 @@ func HandleDomainBlocking(db *sql.DB, req *http.Request, responseChan chan<- *ht
 	responseChan <- nil
 }
 
+// Helper function to check if the domain is localhost or loopback
+func isLocalhost(domain string) bool {
+	return domain == "localhost" || domain == "127.0.0.1" || domain == "::1"
+}
+
+/*
+HandleIPBlocking checks if an ip is blocked. If blocked, it returns a redirect response to the block page.
+*/
 func HandleIPBlocking(db *sql.DB, req *http.Request, responseChan chan<- *http.Response, wg *sync.WaitGroup) {
 	defer wg.Done()
 	domain := utility.CleanDomain(req.URL.Host)
+
+	// Ignore localhost or loopback addresses
+	if isLocalhost(domain) {
+		responseChan <- nil
+		return
+	}
+
 	ip, err := utility.ResolveDomainToIP(domain)
 	if err != nil {
 		log.Printf("Could not resolve domain to IP: %s, error: %v", req.URL.Host, err)
 		responseChan <- nil
 		return
 	}
+
+	// Ignore loopback addresses in IP blocking
+	if isLocalhost(ip) {
+		responseChan <- nil
+		return
+	}
+
 	if CheckBlockedIP(db, ip) {
 		log.Printf("Redirecting URL by IP: %s (Domain: %s) to block page", ip, req.URL.Host)
-		redirectURL := fmt.Sprintf("http://localhost:4000/blocked?url=%s", req.URL.String())
+		redirectURL := fmt.Sprintf("http://127.0.0.1:4000/blocked?url=%s", req.URL.String())
 		redirectResponse := goproxy.NewResponse(req, "", http.StatusTemporaryRedirect, "")
 		redirectResponse.Header.Set("Location", redirectURL)
 		responseChan <- redirectResponse
