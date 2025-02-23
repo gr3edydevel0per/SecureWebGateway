@@ -1,4 +1,4 @@
-# Secure Web Gateway Implementation (SASE Framework)
+# Secure Web Gateway  
 
 ## 📌 Overview
 This project implements a **Secure Web Gateway (SWG)** which is a subpart of **Secure Access Service Edge (SASE) framework**, to provide **secure, compliant, and controlled web access**. 
