@@ -82,5 +82,3 @@ and policy enforcement**. The key components include:
   - **Sanya Sinha**
   - **Dr. Keshav Sinha (Guide)**
 
-
-© 2024 SecureWebGateway_Implementation-SASE-Framework. All rights reserved.
