@@ -37,9 +37,9 @@ and policy enforcement**. The key components include:
 
 
 ## 🚀 Future Enhancements
-✅ AI-Driven Threat Detection using machine learning for advanced security.
-🌍 Cloud-Based Deployment for scalable security across multiple locations.
-🕵️ User Behavior Analytics for anomaly detection and proactive security.
+- ✅ AI-Driven Threat Detection using machine learning for advanced security.
+- 🌍 Cloud-Based Deployment for scalable security across multiple locations.
+- 🕵️ User Behavior Analytics for anomaly detection and proactive security.
 
 ## 🤝 Contributors
   - **Akshat Verma**
